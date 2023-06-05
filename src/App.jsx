@@ -1,17 +1,15 @@
-import { useState } from "react";
+import useResponse from "./hooks/useResponse";
 import "./App.css";
 
 function App() {
   const url = "https://httpstat.us/200?sleep=2000";
   const headers = { Accept: "application/json" };
+  const { data, error, isLoading } = useResponse(url, headers);
 
-  const [status, setStatus] = useState("");
+  if (error) return <p>Failed to load.</p>;
+  if (isLoading) return <p>Loading...</p>;
 
-  fetch(url, { headers })
-    .then((res) => res.json())
-    .then((json) => setStatus(json.description));
-
-  return <>{status && <p>Status : {status}</p>}</>;
+  return <p>{data.description}</p>;
 }
 
 export default App;
